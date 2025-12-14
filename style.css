@@ -1,0 +1,903 @@
+/* ================================================================ */
+/* ==================== TEMA: THE WOMEN (WAR & GOLD) =================== */
+/* ================================================================ */
+
+:root {
+    /* Palet Warna Baru: Deep Burgundy, Gold, & Charcoal */
+    --bg-dark: #0f0202;         /* Latar belakang sangat gelap (hampir hitam merah) */
+    --bg-panel: rgba(43, 10, 10, 0.6); /* Panel kaca merah tua */
+    --primary-gold: #eebc51;    /* Aksen Emas (Judul) */
+    --secondary-red: #8a1c1c;   /* Aksen Merah Darah (Hover/Highlights) */
+    --text-main: #f5f0e6;       /* Teks Cream/Kertas Tua */
+    --text-muted: #c4b7a6;      /* Teks sekunder */
+    --border-glass: rgba(238, 188, 81, 0.15); /* Border tipis emas */
+    --highlight-bg: rgba(238, 188, 81, 0.3); /* Highlight teks saat diklik */
+}
+
+/* Gaya dasar & Latar Belakang */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* ================================================================ */
+/* =========== EFEK LATAR BELAKANG PARTICLES (PENGGANTI) ========== */
+/* ================================================================ */
+
+/* Container untuk tsParticles - posisinya fixed di belakang (z-index 0) */
+#tsparticles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none; /* Agar klik tembus ke konten */
+}
+
+/* Hapus background shapes lama jika masih ada sisa kode */
+.background-shapes { display: none; }
+
+/* ================================================================ */
+/* ================= BAR PROGRES & SCROLL REVEAL ================== */
+/* ================================================================ */
+
+#progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    /* Gradient baru: Merah ke Emas */
+    background: linear-gradient(90deg, var(--secondary-red), var(--primary-gold));
+    width: 0%;
+    z-index: 9999;
+    box-shadow: 0 0 10px var(--secondary-red);
+    transition: width 0.1s linear;
+}
+
+.article-container:not(.sub-article-container) {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.article-container {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.article-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================================================================ */
+/* ============= GAYA BARU: SOROTAN ARTIKEL (HIGHLIGHT) =========== */
+/* ================================================================ */
+
+@keyframes temporary-highlight {
+    0% { box-shadow: 0 0 0 0 rgba(238, 188, 81, 0.0); border-color: var(--primary-gold); }
+    50% { box-shadow: 0 0 20px 5px rgba(238, 188, 81, 0.2); border-color: var(--primary-gold); }
+    100% { box-shadow: 0 0 0 0 rgba(238, 188, 81, 0); border-color: transparent; }
+}
+
+.article-highlight {
+    animation: temporary-highlight 2s ease-out;
+}
+
+/* --- GAYA UI UTAMA --- */
+
+/* Efek Spotlight pada Judul Artikel */
+.title-spotlight {
+    position: relative;
+    color: var(--primary-gold);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.article-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    
+    color: var(--text-main);
+    background: var(--bg-panel); /* Merah gelap transparan */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 1rem;
+    z-index: 10;
+    
+    /* Border halus emas */
+    border: 1px solid var(--border-glass); 
+}
+
+/* Efek hover pada header artikel */
+.article-header:hover {
+    background: rgba(138, 28, 28, 0.3); /* Sedikit lebih merah saat hover */
+    border-color: var(--primary-gold);
+}
+
+/* Hapus gradient border lama yang berlebihan */
+.article-header::before { display: none; }
+
+.article-header h3 { 
+    color: var(--text-main);
+    font-family: 'Cinzel', serif; /* Font judul buku */
+    letter-spacing: 0.05em;
+}
+
+.article-content {
+    background: rgba(20, 5, 5, 0.5); /* Sangat gelap untuk kontras teks */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    border: 1px solid var(--border-glass);
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+    
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.7s ease-in-out, padding 0.5s ease-in-out;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.article-content-inner p {
+    margin-bottom: 1rem;
+    text-align: justify;
+    text-indent: 2em;
+    color: var(--text-main);
+    font-weight: 300;
+}
+
+.article-content-inner img {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid var(--border-glass);
+    border-radius: 4px;
+}
+
+.article-content-inner img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-gold);
+}
+
+.article-content-inner p:last-child {
+    margin-bottom: 0;
+}
+
+.article-container.active .article-header {
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: linear-gradient(to right, rgba(138, 28, 28, 0.4), rgba(43, 10, 10, 0.6));
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.article-container.active .article-header h3 {
+    color: var(--primary-gold); /* Judul jadi emas saat aktif */
+}
+
+.article-container.active .article-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.collapse-icon svg {
+    transition: transform 0.3s ease-in-out;
+    stroke: var(--text-muted);
+}
+
+.article-container.active .collapse-icon svg {
+    transform: rotate(180deg);
+    stroke: var(--primary-gold);
+}
+
+/* Scrollbar Kustom */
+.article-content::-webkit-scrollbar {
+    width: 6px;
+}
+.article-content::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.3);
+}
+.article-content::-webkit-scrollbar-thumb {
+    background-color: var(--secondary-red); /* Scrollbar merah */
+    border-radius: 10px;
+}
+.article-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--primary-gold); /* Scrollbar emas saat hover */
+}
+
+/* ================================================================ */
+/* =========== GAYA SOROTAN TEKS & ANIMASI BARU ============= */
+/* ================================================================ */
+
+.original-text-segment {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    padding: 2px 0;
+    border-radius: 2px;
+}
+
+.original-text-segment:hover {
+    background-color: rgba(138, 28, 28, 0.4);
+    color: white;
+}
+
+/* Gaya sorotan standar saat teks diklik */
+/* ================================================================ */
+/* ====== HIGHLIGHT TEKS (THE WOMEN - RUBY GLASS CLEAN) =========== */
+/* ================================================================ */
+
+.selected-text {
+    /* 1. Base Glass (Ruby Tint - Tanpa Blur) */
+    background: rgba(100, 10, 10, 0.45) !important; 
+
+    /* 2. Layout Chip */
+    color: #fff0f0 !important; /* Putih kemerahan */
+    font-weight: 600 !important;
+    border-radius: 4px;
+    padding: 0 4px;
+  
+    
+    /* Agar style kotak tidak putus saat ganti baris */
+    box-decoration-break: clone; 
+    -webkit-box-decoration-break: clone;
+
+    /* 3. Beveled Border (Efek 3D) */
+    /* Atas: Highlight Pink Pucat */
+    border-top: 1px solid rgba(255, 200, 200, 0.5) !important;
+    /* Bawah: Shadow Emas Tembaga */
+    border-bottom: 1px solid rgba(184, 134, 11, 0.8) !important;
+    /* Samping: Transparan */
+    border-left: 1px solid rgba(255, 200, 200, 0.15) !important;
+    border-right: 1px solid rgba(0, 0, 0, 0.3) !important;
+
+    /* 4. Glossy Shadow */
+    box-shadow: 
+        /* Kilau permukaan dalam */
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        /* Bayangan teks */
+        0 2px 4px rgba(50, 0, 0, 0.4);
+
+    /* Detail Teks */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9); 
+    
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animasi kedip saat klik bookmark (DIREVISI) */
+@keyframes bookmark-blink {
+    0%, 100% { 
+        background-color: transparent; 
+        color: inherit; 
+    }
+    50% { 
+        background-color: var(--primary-gold); 
+        color: #000; 
+        text-shadow: none;
+        box-shadow: 0 0 15px var(--primary-gold);
+    }
+}
+
+.bookmark-highlight {
+    animation: bookmark-blink 1s ease-in-out 3 forwards; /* Durasi 3x blink */
+    border-radius: 4px;
+    padding: 2px 4px; /* Sedikit padding agar highlight lebih jelas */
+    margin: 0 -4px; /* Kompensasi margin agar teks tidak geser */
+}
+
+/* Popup Terjemahan */
+/* ================================================================ */
+/* =========== POPUP TERJEMAHAN (PALET: CRIMSON & GOLD) =========== */
+/* ================================================================ */
+
+#translation-popup { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    
+    position: absolute; 
+    z-index: 100; 
+    
+    /* Animasi */
+    transform: translateY(10px) scale(0.98); 
+    transition: 
+        opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), 
+        transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    
+    pointer-events: none; 
+    opacity: 0; 
+    
+    padding: 1rem 1.25rem; 
+    border-radius: 1rem; 
+    max-width: 450px; 
+    
+    /* Tipografi */
+    font-size: 1rem; 
+    font-family: 'Inter', sans-serif;
+    color: #fff0f0; /* Putih kemerahan sangat muda agar hangat */
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9); 
+    line-height: 1.5;
+
+    /* --- BACKGROUND (PALET GAMBAR: DARK RED/MAROON) --- */
+    background-image: none !important; 
+    /* Menggunakan Merah Marun Gelap dengan transparansi */
+    background-color: rgba(60, 10, 15, 0.5) !important; 
+
+    /* Blur Effect */
+    backdrop-filter: blur(5px); 
+    -webkit-backdrop-filter: blur(3px); 
+
+    /* --- EDGE DEPTH & GLOSSY EFFECT --- */
+    
+    /* 1. Beveled Border */
+    /* Atas & Kiri: Pink/Merah Muda Pucat (Highlight Cahaya) */
+    border-top: 1px solid rgba(255, 200, 200, 0.3); 
+    border-left: 1px solid rgba(255, 200, 200, 0.15);
+    
+    /* Kanan & Bawah: Emas Tembaga (Bayangan Mewah) */
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.6); /* Emas Klasik */
+    
+    /* 2. Glossy Highlight & Shadow */
+    box-shadow: 
+        /* Highlight di Bibir Atas */
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+        
+        /* Inner Glow: Nuansa Merah Membara di dalam */
+        inset 0 0 30px rgba(100, 0, 0, 0.4),
+        
+        /* Drop Shadow Gelap */
+        0 15px 35px -5px rgba(20, 0, 0, 0.9),
+        0 0 15px rgba(150, 20, 20, 0.2); /* Outer Glow Merah Tipis */
+}
+
+/* State Visible */
+#translation-popup.visible { 
+    opacity: 1; 
+    pointer-events: auto; 
+    transform: translateY(0) scale(1);
+}
+
+/* Panah Kecil (Triangle) */
+#translation-popup::before {
+    content: '';
+    position: absolute;
+    
+    /* Logika Posisi Baru */
+    bottom: 100%; /* Default: Panah di atas popup */
+    /* Menggunakan variabel CSS yang diupdate JS agar panah menunjuk teks dengan akurat */
+    left: var(--arrow-x, 50%); 
+    transform: translateX(-50%);
+    
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent rgba(60, 10, 15, 0.85) transparent; /* Sesuaikan warna background popup Anda */
+    
+    /* Filter/Blur tetap sama */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(3px);
+    filter: drop-shadow(0 -1px 0 rgba(255, 200, 200, 0.2));
+    
+    pointer-events: none;
+    transition: left 0.1s ease-out; /* Animasi geser panah halus */
+}
+
+/* Kelas tambahan jika popup pindah ke ATAS teks (Panah harus di bawah) */
+#translation-popup.flipped::before {
+    bottom: auto;
+    top: 100%;
+    border-color: rgba(60, 10, 15, 0.85) transparent transparent transparent;
+    filter: drop-shadow(0 1px 0 rgba(184, 134, 11, 0.6));
+}
+
+/* ================================================================ */
+/* ====== TOMBOL BOOKMARK: THE WOMEN (RUBY DEPTH GLASS) =========== */
+/* ================================================================ */
+.add-vocab-btn {
+    /* 1. Base Glass (Dark Crimson Tint) */
+    background: rgba(40, 5, 10, 0.4); 
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    /* 2. Beveled Border (Depth) */
+    /* Atas: Highlight Pink Pucat */
+    border-top: 1px solid rgba(255, 200, 200, 0.3);
+    /* Bawah: Bayangan Emas Gelap */
+    border-bottom: 1px solid rgba(184, 134, 11, 0.4);
+    /* Samping */
+    border-left: 1px solid rgba(255, 200, 200, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.4);
+
+    /* 3. Glossy Shadow */
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.15),
+        0 4px 10px rgba(20, 0, 0, 0.4);
+
+    /* Tipografi */
+    color: #fcf6ba; /* Pale Gold Text */
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    flex-shrink: 0;
+}
+
+/* State Hover */
+.add-vocab-btn:hover {
+    background: rgba(160, 20, 20, 0.3); /* Red Tint */
+    border-top-color: rgba(255, 230, 230, 0.6);
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.3),
+        0 0 15px rgba(160, 20, 20, 0.4); /* Red Glow */
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* State Active/Added (RUBY GEMSTONE) */
+.add-vocab-btn.added {
+    /* 1. Ruby Gradient (Semi-Transparent) */
+    background: linear-gradient(145deg, rgba(178, 34, 34, 0.85), rgba(100, 10, 10, 0.9));
+    
+    /* 2. Deep Borders */
+    border-top: 1px solid rgba(255, 255, 255, 0.5); /* Highlight Tajam */
+    border-bottom: 1px solid rgba(212, 175, 55, 0.6); /* Gold Shadow */
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.5);
+
+    color: #ffffff; 
+
+    /* 3. Ruby Glow & Inner Depth */
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.4), 
+        inset 0 -2px 10px rgba(50, 0, 0, 0.6), /* Deep Red Inner Shadow */
+        0 0 20px rgba(178, 34, 34, 0.6), /* Red Outer Glow */
+        0 4px 6px rgba(0,0,0,0.5);
+        
+    transform: scale(1.05);
+}
+
+/* --- KONTROL UI & FONT --- */
+
+.ui-controls {
+    position: fixed;
+    top: 1rem;
+    right: 1.5rem;
+    z-index: 1001;
+    display: flex;
+    gap: 0.5rem;
+}
+
+#font-adjuster-toggle, #vocab-toggle-button {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    color: var(--primary-gold);
+    transition: all 0.2s ease-in-out;
+}
+
+#font-adjuster-toggle:hover, #vocab-toggle-button:hover {
+    background: var(--secondary-red);
+    color: white;
+    border-color: var(--secondary-red);
+}
+
+#font-adjuster-container {
+    position: fixed;
+    top: 4.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#font-adjuster-container.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.font-adjuster-icon {
+    color: var(--primary-gold);
+    font-weight: 600;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--primary-gold);
+    border-radius: 50%;
+    border: 2px solid #000;
+    transition: transform 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Ukuran Font */
+#articles-container.font-size-1 .text-lg { font-size: 0.9rem; line-height: 1.5rem; }
+#articles-container.font-size-2 .text-lg { font-size: 1.0rem; line-height: 1.65rem; }
+#articles-container.font-size-3 .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+#articles-container.font-size-4 .text-lg { font-size: 1.25rem; line-height: 1.9rem; }
+#articles-container.font-size-5 .text-lg { font-size: 1.4rem; line-height: 2.1rem; }
+
+/* ================================================================ */
+/* ==================== GAYA SUB-ARTIKEL (GLOSSY) ================= */
+/* ================================================================ */
+
+.sub-article-container {
+    margin-left: 1.5rem;
+    width: calc(100% - 1.5rem);
+    margin-top: 1.5rem;
+    position: relative;
+    
+    /* Hapus gaya lama (border kiri) */
+    border-left: none;
+}
+
+/* --- HEADER SUB-ARTIKEL (DEFAULT) --- */
+.sub-article-container .article-header {
+    /* Glassmorphism Base: Campuran Merah & Emas Transparan */
+    background: linear-gradient(
+        135deg, 
+        rgba(138, 28, 28, 0.2) 0%, 
+        rgba(238, 188, 81, 0.1) 100%
+    );
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* Border halus mengkilap */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    
+    /* Glossy Highlight (Pantulan cahaya di atas) */
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 
+                0 4px 10px rgba(0, 0, 0, 0.1);
+    
+    padding: 0.75rem 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.sub-article-container .article-header h3 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--primary-gold); /* Warna teks default (abu-krem) */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transition: color 0.3s ease;
+}
+
+.sub-article-container .article-header .collapse-icon svg {
+    /* GANTI BARIS INI JUGA: */
+    stroke: var(--primary-gold); /* Ubah dari var(--text-muted) ke emas */
+    transition: all 0.3s ease;
+}
+
+/* --- HEADER SUB-ARTIKEL (ACTIVE / EXPANDED - YELLOW GLASS) --- */
+.sub-article-container.active .article-header {
+    /* Gradasi: Emas (0%) ke Merah (100%) dengan Transparansi */
+    background: linear-gradient(
+        135deg, 
+        rgba(238, 188, 81, 0.9) 15%,   /* Emas Dominan (Opasitas 90%) */
+        rgba(200, 60, 60, 0.7) 100%    /* Merah Pudar (Opasitas 70%) */
+    );
+    
+    /* Efek Blur Kaca */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* Border: Putih transparan agar terlihat seperti ujung kaca */
+    border-color: rgba(255, 255, 255, 0.3);
+    border-radius: 0.5rem 0.5rem 0 0;
+    
+    /* Glossy Highlight (Atas) + Warm Glow (Sekeliling) */
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.4), /* Pantulan cahaya di bibir atas */
+        0 8px 25px rgba(138, 28, 28, 0.3);      /* Glow merah hangat di luar */
+}
+
+/* Teks Hitam-Merah Gelap (Agar kontras & elegan) */
+.sub-article-container.active .article-header h3 {
+    color: #2b0a0a !important; /* Dark Burgundy/Black */
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2); /* Sedikit highlight putih di bawah teks */
+    font-weight: 800;
+}
+
+/* Icon panah mengikuti warna teks */
+.sub-article-container.active .article-header .collapse-icon svg {
+     stroke: #ffffff !important; /* <-- Ubah jadi Putih */
+    transform: rotate(180deg);
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); /* Opsional: Bayangan agar kontras */
+}
+
+
+/* --- KONTEN SUB-ARTIKEL --- */
+.sub-article-container .article-content {
+    /* Glassy Dark Red background untuk konten */
+    background: rgba(43, 10, 10, 0.4); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    border: 0px solid rgba(238, 188, 81, 0.2);
+    border-top: none; /* Menyatu dengan header */
+    border-left: 1px solid rgba(238, 188, 81, 0.2); /* Override style lama */
+    border-radius: 0 0 0.5rem 0.5rem;
+    
+    padding-left: 1rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Pastikan animasi konten tetap halus */
+.sub-article-container.active .article-content {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.sub-article-container.active .article-header {
+    border-left-color: var(--primary-gold);
+}
+
+.sub-article-container.active .article-header h3 {
+    color: var(--primary-gold);
+}
+
+/* ================================================================ */
+/* ================== PANEL BOOKMARK =================== */
+/* ================================================================ */
+
+#vocab-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    max-width: 90vw;
+    height: 100%;
+    z-index: 1002;
+    background: rgba(15, 2, 2, 0.95); /* Sidebar hampir solid */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid var(--border-glass);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+}
+
+#vocab-sidebar.visible {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-glass);
+    flex-shrink: 0;
+}
+
+#clear-vocab-button {
+    background-color: transparent;
+    border: 1px solid var(--secondary-red);
+    color: var(--secondary-red);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#clear-vocab-button:hover {
+    background-color: var(--secondary-red);
+    color: white;
+}
+
+#vocab-list {
+    list-style: none;
+    padding: 0.5rem;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#vocab-list::-webkit-scrollbar { width: 6px; }
+#vocab-list::-webkit-scrollbar-track { background: transparent; }
+#vocab-list::-webkit-scrollbar-thumb { background-color: var(--secondary-red); border-radius: 6px; }
+
+.vocab-item {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.vocab-item:hover {
+    border-color: var(--primary-gold);
+    background-color: rgba(238, 188, 81, 0.05);
+}
+
+.vocab-item-original {
+    font-weight: 600;
+    color: var(--primary-gold);
+    margin-bottom: 0.25rem;
+}
+
+.vocab-item-translation {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+}
+
+.vocab-item-source {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+}
+
+.delete-vocab-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    opacity: 0.5;
+}
+
+.vocab-item:hover .delete-vocab-btn {
+    opacity: 1;
+}
+
+.delete-vocab-btn:hover {
+    color: var(--secondary-red);
+}
+
+.empty-vocab-message {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+/* ================================================================ */
+/* ================= PREVIEW GAMBAR ================== */
+/* ================================================================ */
+
+#image-preview-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+#image-preview-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#preview-image {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease-out;
+    transform-origin: center center;
+    border: 1px solid var(--text-muted);
+}
+
+#preview-image.pannable { cursor: grab; }
+#preview-image.panning { cursor: grabbing; }
+
+.preview-controls {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-color: var(--bg-panel);
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.75rem;
+    z-index: 10;
+    border: 1px solid var(--border-glass);
+}
+
+.preview-control-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--text-main);
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-control-btn:hover {
+    background-color: var(--primary-gold);
+    color: black;
+}
+
+#preview-close-button {
+    font-size: 2rem;
+    order: 4;
+}
+
+#preview-close-button:hover {
+    transform: rotate(90deg);
+    color: var(--secondary-red);
+}
