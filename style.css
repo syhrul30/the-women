@@ -745,59 +745,104 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 #vocab-list::-webkit-scrollbar { width: 6px; }
-#vocab-list::-webkit-scrollbar-track { background: transparent; }
-#vocab-list::-webkit-scrollbar-thumb { background-color: var(--secondary-red); border-radius: 6px; }
-
-.vocab-item {
-    padding: 1rem;
-    margin: 0.5rem;
-    border-radius: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.03);
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    position: relative;
+ #vocab-list::-webkit-scrollbar-track { background: transparent; }
+ #vocab-list::-webkit-scrollbar-thumb { background-color: var(--secondary-red); border-radius: 6px; }
+ 
+ .vocab-item {
+   padding: 1rem 1rem 1rem 1.25rem; /* Extra padding kiri untuk border */
+   margin: 0.5rem 0;
+   border-radius: 0 0.5rem 0.5rem 0;
+   background-color: transparent; /* Latar belakang transparan */
+   border-left: 3px solid transparent; /* Border kiri transparan sebagai persiapan hover */
+     transition: all 0.2s ease;
+     cursor: pointer;
+     position: relative;
+ }
+ 
+ .vocab-item:hover {
+   border-left-color: var(--primary-gold); /* Border kiri muncul saat hover */
+   background-color: rgba(238, 188, 81, 0.08); /* Latar belakang emas halus saat hover */
+ }
+ 
+ /* --- v5.6: Last Read & Cross-Book Styles --- */
+ .vocab-item.last-read {
+   margin-bottom: 1.5rem;
+   background: linear-gradient(90deg, rgba(238, 188, 81, 0.1), transparent);
+     border-left: 3px solid var(--primary-gold);
+   border-radius: 0 0.5rem 0.5rem 0;
+   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Bayangan halus */
+ }
+ 
+ .last-read-badge {
+     display: inline-block;
+   font-size: 0.7rem;
+     padding: 2px 8px;
+     border-radius: 4px;
+   background-color: rgba(238, 188, 81, 0.15); /* Latar belakang transparan emas */
+   color: var(--primary-gold); /* Teks emas */
+     font-weight: 800;
+     margin-bottom: 0.5rem;
+   letter-spacing: 0.05em;
+ }
+ 
+ .vocab-divider {
+   padding: 1.5rem 0.5rem 0.75rem; /* Menambah ruang di atas divider */
+     font-size: 0.7rem;
+     font-weight: 700;
+     letter-spacing: 0.1em;
+   color: rgba(255, 255, 255, 0.4); /* Warna divider lebih pudar */
+   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+     margin-bottom: 0.5rem;
+     text-transform: uppercase;
+ }
+ 
+.vocab-item-book {
+   font-size: 0.7rem;
+   color: var(--text-muted); /* Warna judul buku lebih kalem */
+   margin-bottom: 0.35rem;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.05em;
+   display: block;
 }
-
-.vocab-item:hover {
-    border-color: var(--primary-gold);
-    background-color: rgba(238, 188, 81, 0.05);
-}
-
-.vocab-item-original {
-    font-weight: 600;
-    color: var(--primary-gold);
-    margin-bottom: 0.25rem;
-}
-
-.vocab-item-translation {
-    font-size: 0.9rem;
-    color: var(--text-main);
-    margin-bottom: 0.75rem;
-}
-
-.vocab-item-source {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-    padding-top: 0.5rem;
-}
-
-.delete-vocab-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 20px;
-    height: 20px;
-    border: none;
-    background: none;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    line-height: 1;
-    cursor: pointer;
-    transition: color 0.2s ease;
-    opacity: 0.5;
-}
+ 
+ .vocab-item-original {
+   font-size: 1rem; /* Ukuran font sedikit lebih kecil */
+   font-weight: 700;
+     color: var(--primary-gold);
+   margin-bottom: 0.35rem;
+   line-height: 1.4;
+ }
+ 
+ .vocab-item-translation {
+   font-size: 0.85rem; /* Ukuran font terjemahan lebih kecil */
+   color: rgba(245, 240, 230, 0.8); /* Warna teks terjemahan lebih pudar */
+     margin-bottom: 0.75rem;
+   line-height: 1.5;
+ }
+ 
+ .vocab-item-source {
+     font-size: 0.75rem;
+   color: rgba(255, 255, 255, 0.4); /* Sumber lebih pudar */
+     border-top: 1px dashed rgba(255, 255, 255, 0.1);
+     padding-top: 0.5rem;
+ }
+ 
+ .delete-vocab-btn {
+     position: absolute;
+   top: 1rem; /* Posisi tombol hapus disesuaikan */
+   right: 1rem;
+     width: 20px;
+     height: 20px;
+     border: none;
+     background: none;
+     color: var(--text-muted);
+     font-size: 1.2rem;
+     line-height: 1;
+     cursor: pointer;
+     transition: color 0.2s ease;
+     opacity: 0.5;
+ }
 
 .vocab-item:hover .delete-vocab-btn {
     opacity: 1;
